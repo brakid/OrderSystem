@@ -1,6 +1,6 @@
-import { Entity, Column, BaseEntity, JoinTable, ManyToOne, ManyToMany, PrimaryColumn } from "typeorm";
-import { Field, Float, ID, Int, ObjectType, registerEnumType } from "type-graphql";
-import { randomUUID, type UUID } from "crypto";
+import { Entity, Column, BaseEntity, JoinTable, ManyToOne, ManyToMany, PrimaryColumn } from 'typeorm';
+import { Field, Float, ID, Int, ObjectType, registerEnumType } from 'type-graphql';
+import { randomUUID, type UUID } from 'crypto';
 
 export enum OrderStatus {
   InPreparation = 'IN_PREPARATION',

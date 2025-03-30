@@ -8,11 +8,9 @@ const schema = await buildSchema({
   resolvers: [CustomerResolver],
 });
 
-console.log(schema);
-
 export const dataSource = new DataSource({
-    type: "sqlite",
-    database: "/Users/hagenschupp/Documents/Projects/OrderSystem/backend/database.sql",
+    type: 'sqlite',
+    database: '/Users/hagenschupp/Documents/Projects/OrderSystem/backend/database.sql',
     entities: ['./src/types.ts'],
     logging: true,
     synchronize: true,
@@ -20,9 +18,9 @@ export const dataSource = new DataSource({
 
 try {
     await dataSource.initialize();
-    console.log("Data Source has been initialized!");
+    console.log('Data Source has been initialized!');
 } catch (err) {
-    console.error("Error during Data Source initialization:", err);
+    console.error('Error during Data Source initialization:', err);
 }
 
 const server = new ApolloServer({
@@ -30,7 +28,7 @@ const server = new ApolloServer({
 });
 
 const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 }
+  listen: { port: 4000 },
 });
 
 console.log(`🚀  Server ready at: ${url}`);

@@ -1,5 +1,5 @@
-import { Arg, FieldResolver, Query, Resolver, Root, type ResolverInterface } from "type-graphql";
-import { Customer, Order, OrderStatus } from "./types";
+import { Arg, FieldResolver, Query, Resolver, Root, type ResolverInterface } from 'type-graphql';
+import { Customer, Order, OrderStatus } from './types';
 
 @Resolver(of => Customer)
 export class CustomerResolver implements ResolverInterface<Customer> {
