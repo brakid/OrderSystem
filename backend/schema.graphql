@@ -7,9 +7,56 @@ type Book {
 type Query {
   getBooks: [Book]
   getBook(title: String!): Book
+
+  getMenu: Menu
+  getOrders(orderStatus: OrderStatus): [Order] # optional parameter for order status
 }
 
 type Mutation {
   createBook(title: String!, author: String!): Book
   updateBook(id: ID!, title: String!, author: String!): Book
+
+  registerCustomer(name: String!, mailAddress: String, phoneNumber: String): Customer
+}
+
+type Customer {
+  id: ID!
+  name: String!
+  mailAddress: String
+  phoneNumber: String
+}
+
+type Item {
+  id: ID!,
+  name: String!
+  description: String!
+  price: Float!
+}
+
+type MenuItem {
+  item: Item!
+  available: Boolean!
+}
+
+type Menu {
+  items: [MenuItem!]
+}
+
+type OrderItem {
+  item: Item!
+  quantity: Int!
+}
+
+enum OrderStatus {
+  RECEIVED
+  IN_PREPARATION
+  PREPARED
+  PAID
+}
+
+type Order {
+  id: ID!
+  items: [OrderItem!]
+  status: OrderStatus!
+  customer: Customer!
 }

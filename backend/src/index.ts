@@ -1,62 +1,32 @@
 import { ApolloServer } from '@apollo/server';
-import gql from 'graphql-tag';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import type { Book, Resolvers } from './gql/resolvers-types';
-import { readFileSync } from 'fs';
-import { randomUUID } from 'crypto';
+import { buildSchema } from 'type-graphql';
+import { CustomerResolver } from './resolvers';
+import { DataSource } from 'typeorm';
 
-const typeDefs = gql(
-  readFileSync('schema.graphql', {
-    encoding: 'utf-8',
-  })
-);
+const schema = await buildSchema({
+  resolvers: [CustomerResolver],
+});
 
-const books: Book[] = [
-  {
-    id: randomUUID().toString(),
-    title: 'The Awakening',
-    author: 'Kate Chopin',
-  },
-  {
-    id: randomUUID().toString(),
-    title: 'City of Glass',
-    author: 'Paul Auster',
-  },
-];
+console.log(schema);
 
-const resolvers: Resolvers = {
-  Query: {
-    getBooks: (): Book[] => books,
-    getBook: (parent, args, contextValue, info): Book => books.find(book => book.title === args.title) as Book
-  },
-  Mutation: {
-    updateBook: (parent, args, contextValue, info): Book => {
-      const book = books.find(book => book.id == args.id);
-      if (!!book) {
-        book.title = args.title;
-        book.author = args.author;
-        return book;
-      } else {
-        throw new Error(`No book with ID ${args.id} found`);
-      }
-    },
-    createBook: (parent, args, contextValue, info): Book => {
-      const book = {
-        id: randomUUID().toString(),
-        title: args.title,
-        author: args.author,
-      }
+export const dataSource = new DataSource({
+    type: "sqlite",
+    database: "/Users/hagenschupp/Documents/Projects/OrderSystem/backend/database.sql",
+    entities: ['./src/types.ts'],
+    logging: true,
+    synchronize: true,
+})
 
-      books.push(book);
-
-      return book;
-    }
-  }
-};
+try {
+    await dataSource.initialize();
+    console.log("Data Source has been initialized!");
+} catch (err) {
+    console.error("Error during Data Source initialization:", err);
+}
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
 });
 
 const { url } = await startStandaloneServer(server, {
