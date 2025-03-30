@@ -19,7 +19,7 @@ export class CustomerResolver implements ResolverInterface<Customer> {
   }
 
   @FieldResolver(type => [Order])
-  async getOrders(@Root() customer: Customer, @Arg('statuses', () => [OrderStatus], { nullable: true, defaultValue: [OrderStatus.InPreparation] }) statuses: OrderStatus[]): Promise<Order[]> {
+  async getOrders(@Root() customer: Customer, @Arg('statuses', () => [OrderStatus], { nullable: true, defaultValue: Object.values(OrderStatus) }) statuses: OrderStatus[]): Promise<Order[]> {
     if (statuses.length == 0) {
       return Order.find({ where: { customer }, relations: ['customer', 'items'] });
     }
